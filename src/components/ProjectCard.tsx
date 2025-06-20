@@ -10,7 +10,9 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
-  projectId,
+  // projectId is passed as a prop but not used directly in this component's rendering logic,
+  // so it's removed from destructuring to avoid unused variable lint error.
+  // It's still part of ProjectCardProps for type safety when using the component.
   projectName,
   participants = [],
   progress = 0,

@@ -139,7 +139,7 @@ const KanbanBoardPage: React.FC<KanbanBoardPageProps> = ({ params }) => {
 
   const handleSubmitDesignProposal = (taskId: string, newFigmaLink: string, reason: string) => {
     // Step 1: Add "Proposal" activity
-    let taskAfterProposal = addActivityToTask(taskId, {
+    const taskAfterProposal = addActivityToTask(taskId, {
         userName: currentMockUser.name,
         userAvatar: currentMockUser.avatarUrl,
         action: '提案了設計變更',
@@ -159,12 +159,13 @@ const KanbanBoardPage: React.FC<KanbanBoardPageProps> = ({ params }) => {
 
     // Simulate delay for PM approval
     setTimeout(() => {
-        const currentTaskState = tasks[taskId] // Get potentially updated task state if other actions happened
-                                  || taskAfterProposal!; // Fallback to task state after proposal
+        // const currentTaskState = tasks[taskId] // Get potentially updated task state if other actions happened
+        //                           || taskAfterProposal!; // Fallback to task state after proposal
 
         const mockPM = { name: "PM 小張", avatarUrl: 'https://i.pravatar.cc/150?u=pmXiaozhang' };
         const approvalDetails = `批准了由 ${currentMockUser.name} 提出的設計變更。\n新的設計稿: ${newFigmaLink}`;
 
+        // Ensuring this is const as per the prefer-const lint rule
         const taskAfterApproval = addActivityToTask(taskId, {
             userName: mockPM.name,
             userAvatar: mockPM.avatarUrl,

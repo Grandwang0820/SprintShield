@@ -1,5 +1,6 @@
 import React from 'react';
-import Avatar from './Avatar'; // Assuming Avatar is in the same directory
+import Avatar from './Avatar';
+import Image from 'next/image'; // Added import
 
 interface TaskCardProps {
   taskId: string;
@@ -7,7 +8,7 @@ interface TaskCardProps {
   figmaPreviewUrl?: string | null;
   latestActivity?: string;
   assignee?: { id: string; name?: string; avatarUrl?: string | null };
-  dueDate?: string; // Format as string for display
+  dueDate?: string;
   tags?: string[];
   onClick?: () => void;
 }
@@ -35,24 +36,28 @@ const TaskCard: React.FC<TaskCardProps> = ({
       </h4>
 
       {/* Design Preview Area */}
-      {figmaPreviewUrl ? (
-        <div className="my-2 h-32 bg-gray-100 rounded flex items-center justify-center">
-          <img src={figmaPreviewUrl} alt={`Design preview for ${title}`} className="max-h-full max-w-full object-contain rounded" />
-        </div>
-      ) : (
-        <div className="my-2 h-32 bg-gray-100 rounded flex items-center justify-center text-sm text-gray-500">
-          [🔗 Bind Design]
-        </div>
-      )}
+      <div className="my-2 h-32 bg-gray-100 rounded flex items-center justify-center relative overflow-hidden"> {/* Added relative and overflow-hidden for Image layout='fill' or responsive */}
+        {figmaPreviewUrl ? (
+          <Image
+            src={figmaPreviewUrl}
+            alt={`Design preview for ${title}`}
+            layout="fill" // Fill the parent div
+            objectFit="contain" // Similar to object-contain
+            className="rounded"
+          />
+        ) : (
+          <div className="flex items-center justify-center text-sm text-gray-500 w-full h-full"> {/* Ensure placeholder takes space */}
+            [🔗 綁定設計稿]
+          </div>
+        )}
+      </div>
 
-      {/* Latest Activity */}
       {latestActivity && (
         <p className="text-xs text-gray-500 my-2 truncate" title={latestActivity}>
           {latestActivity}
         </p>
       )}
 
-      {/* Bottom Info: Assignee, Due Date */}
       <div className="flex items-center justify-between mt-3 text-xs text-gray-600">
         <div className="flex items-center">
           {assignee ? (
@@ -64,7 +69,6 @@ const TaskCard: React.FC<TaskCardProps> = ({
         </div>
       </div>
 
-      {/* Tags */}
       {tags.length > 0 && (
         <div className="mt-2">
           {tags.map(tag => (
